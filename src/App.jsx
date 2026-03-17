@@ -1,161 +1,99 @@
-import { useState } from "react";
+
+
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setTitle,
+  addSubTask,
+  updateSubTask,
+  saveTodo,
+  deleteTodo,
+  editTodo,
+} from "../redux/todoSlice";
 
 export default function App() {
-
-  const [title, setTitle] = useState("");
-  const [subTasks, setSubTasks] = useState([""]);
-  const [todos, setTodos] = useState([]);
-  const [editIndex, setEditIndex] = useState(null); 
-
-  const addSubTask = () => {
-    setSubTasks([...subTasks, ""]);
-  };
-
-  const updateSubTask = (index, value) => {
-    const updated = [...subTasks];
-    updated[index] = value;
-    setSubTasks(updated);
-  };
-
-  const saveTodo = () => {
-
-    if (!title) return;
-
-    const newTodo = {
-      title,
-      subTasks
-    };
-
-    if (editIndex !== null) {
-      const updatedTodos = [...todos];
-      updatedTodos[editIndex] = newTodo;
-
-      setTodos(updatedTodos);
-      setEditIndex(null);
-    } else {
-      setTodos([...todos, newTodo]);
-    }
-
-    setTitle("");
-    setSubTasks([""]);
-  };
-
-  const deleteTodo = (index) => {
-    const updated = todos.filter((_, i) => i !== index);
-    setTodos(updated);
-  };
-
-  const editTodo = (index) => {
-    const todo = todos[index];
-    setTitle(todo.title);
-    setSubTasks(todo.subTasks);
-    setEditIndex(index);
-  };
+  const dispatch = useDispatch();
+  const { title, subTasks, todos, editIndex } = useSelector(
+    (state) => state.todos,
+  );
 
   return (
-
     <div className="min-h-screen bg-gray-100 p-10">
-
-      <div className="min-w-xl max-w-3xl mx-auto bg-white p-6 rounded-lg shadow">
-
-        <h1 className="text-2xl text-center font-bold mb-4">
-          My Todo List App
-        </h1>
+      <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow">
+        <h1 className="text-xl font-bold mb-4 text-center">My Todo List App</h1>
 
         <input
-          className="w-full border p-2 rounded mb-4"
+          className="w-full border p-2 mb-4 rounded"
           placeholder="Todo Title"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => dispatch(setTitle(e.target.value))}
         />
 
-        <h2 className="font-semibold mb-2">
-          Sub Tasks
-        </h2>
-
         {subTasks.map((task, index) => (
-
           <div key={index} className="flex gap-2 mb-2">
-
             <input
               className="flex-1 border p-2 rounded"
-              placeholder={`Sub Task ${index + 1}`}
+              placeholder={`Subtask ${index + 1}`}
               value={task}
               onChange={(e) =>
-                updateSubTask(index, e.target.value)
+                dispatch(
+                  updateSubTask({
+                    index,
+                    value: e.target.value,
+                  }),
+                )
               }
             />
 
             {index === subTasks.length - 1 && (
               <button
-                onClick={addSubTask}
-                className="bg-green-400 font-bold text-white px-3 rounded"
+                onClick={() => dispatch(addSubTask())}
+                className="bg-green-400 text-[#1b67d9] font-bold px-3 rounded"
               >
                 +
               </button>
             )}
-
           </div>
         ))}
 
         <button
-          onClick={saveTodo}
-          className="mt-3 bg-green-500 text-purple-500 px-4 py-2 rounded w-full"
+          onClick={() => dispatch(saveTodo())}
+          className=" mt-3 bg-blue-500 text-violet-600 font-semibold p-2 rounded cursor-pointer"
         >
-          {editIndex !== null ? "Update Todo" : "Save Todo"}
+          {editIndex !== null ? "Update Todo" : "Save To-Do"}
         </button>
-
       </div>
 
-      <div className="max-w-xl mx-auto mt-8">
-
+      <div className="max-w-2xl mx-auto mt-6">
         {todos.map((todo, index) => (
-
-          <div
-            key={index}
-            className="bg-white p-4 rounded shadow mb-4"
-          >
-
+          <div key={index} className="bg-[#e9e9e9] p-4 mb-4 rounded shadow">
             <div className="flex justify-between">
-
-              <h3 className="font-bold text-lg">
-                {todo.title}
-              </h3>
+              <h2 className="font-bold">{todo.title}</h2>
 
               <div className="flex gap-3">
                 <button
-                  onClick={() => editTodo(index)}
-                  className="text-blue-500"
+                  onClick={() => dispatch(editTodo(index))}
+                  className="text-blue-500 cursor-pointer"
                 >
                   Edit
                 </button>
 
                 <button
-                  onClick={() => deleteTodo(index)}
-                  className="text-red-500"
+                  onClick={() => dispatch(deleteTodo(index))}
+                  className="text-red-500 cursor-pointer"
                 >
                   Delete
                 </button>
               </div>
-
             </div>
 
-            <ul className="mt-2 list-disc ml-6">
-
-              {todo.subTasks.map((val, i) => (
-                <li key={i}>
-                  {val}
-                </li>
+            <ul className="list-disc ml-5 mt-2">
+              {todo.subTasks.map((task, i) => (
+                <li key={i}>{task}</li>
               ))}
-
             </ul>
-
           </div>
-
         ))}
-
       </div>
-
     </div>
   );
 }
