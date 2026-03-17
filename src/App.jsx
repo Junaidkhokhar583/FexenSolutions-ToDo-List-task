@@ -5,6 +5,7 @@ export default function App() {
   const [title, setTitle] = useState("");
   const [subTasks, setSubTasks] = useState([""]);
   const [todos, setTodos] = useState([]);
+  const [editIndex, setEditIndex] = useState(null); 
 
   const addSubTask = () => {
     setSubTasks([...subTasks, ""]);
@@ -25,7 +26,16 @@ export default function App() {
       subTasks
     };
 
-    setTodos([...todos, newTodo]);
+    if (editIndex !== null) {
+      const updatedTodos = [...todos];
+      updatedTodos[editIndex] = newTodo;
+
+      setTodos(updatedTodos);
+      setEditIndex(null);
+    } else {
+      setTodos([...todos, newTodo]);
+    }
+
     setTitle("");
     setSubTasks([""]);
   };
@@ -35,15 +45,22 @@ export default function App() {
     setTodos(updated);
   };
 
+  const editTodo = (index) => {
+    const todo = todos[index];
+    setTitle(todo.title);
+    setSubTasks(todo.subTasks);
+    setEditIndex(index);
+  };
+
   return (
 
     <div className="min-h-screen bg-gray-100 p-10">
-      <div className="min-w-xl max-w-3xl mx-auto bg-white p-6 rounded-lg shadow">
-        <h1 className="text-2xl text-center font-bold mb-4">
-         My Todo List App
-        </h1>
 
-       
+      <div className="min-w-xl max-w-3xl mx-auto bg-white p-6 rounded-lg shadow">
+
+        <h1 className="text-2xl text-center font-bold mb-4">
+          My Todo List App
+        </h1>
 
         <input
           className="w-full border p-2 rounded mb-4"
@@ -65,40 +82,33 @@ export default function App() {
               placeholder={`Sub Task ${index + 1}`}
               value={task}
               onChange={(e) =>
-                // subTasks.append(e.target.value)
                 updateSubTask(index, e.target.value)
               }
             />
 
- { index===subTasks.length-1 &&(
+            {index === subTasks.length - 1 && (
               <button
                 onClick={addSubTask}
                 className="bg-green-400 font-bold text-white px-3 rounded"
               >
                 +
               </button>
-)}
-           
+            )}
 
           </div>
-        ))
-        }
+        ))}
 
         <button
           onClick={saveTodo}
           className="mt-3 bg-green-500 text-purple-500 px-4 py-2 rounded w-full"
         >
-          Save Todo
+          {editIndex !== null ? "Update Todo" : "Save Todo"}
         </button>
 
       </div>
 
-
-
-
-
-
       <div className="max-w-xl mx-auto mt-8">
+
         {todos.map((todo, index) => (
 
           <div
@@ -112,22 +122,30 @@ export default function App() {
                 {todo.title}
               </h3>
 
-              <button
-                onClick={() => deleteTodo(index)}
-                className="text-red-500"
-              >
-                Delete
-              </button>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => editTodo(index)}
+                  className="text-blue-500"
+                >
+                  Edit
+                </button>
+
+                <button
+                  onClick={() => deleteTodo(index)}
+                  className="text-red-500"
+                >
+                  Delete
+                </button>
+              </div>
 
             </div>
 
             <ul className="mt-2 list-disc ml-6">
 
-              {todo.subTasks.map((val, index) => (
-                <li key={index}>
+              {todo.subTasks.map((val, i) => (
+                <li key={i}>
                   {val}
                 </li>
-
               ))}
 
             </ul>
