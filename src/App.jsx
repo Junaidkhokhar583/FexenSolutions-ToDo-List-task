@@ -1,5 +1,4 @@
 
-
 import { useDispatch, useSelector } from "react-redux";
 import {
   setTitle,
@@ -16,7 +15,9 @@ export default function App() {
     (state) => state.todos,
   );
 
+
   return (
+    <>
     <div className="min-h-screen bg-gray-100 p-10">
       <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow">
         <h1 className="text-xl font-bold mb-4 text-center">My Todo List App</h1>
@@ -95,5 +96,9 @@ export default function App() {
         ))}
       </div>
     </div>
+
+
+
+</>
   );
 }
