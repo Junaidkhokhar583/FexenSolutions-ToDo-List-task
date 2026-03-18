@@ -72,8 +72,8 @@ const todoSlice = createSlice({
     setTitle: (state, action) => {
       state.title = action.payload;
     },
-    addSubTask: (state) => {
-      state.subTasks.push("");
+    addSubTask: (state,action) => {
+      state.subTasks.push(action.payload);
     },
     updateSubTask: (state, action) => {
       const { index, value } = action.payload;

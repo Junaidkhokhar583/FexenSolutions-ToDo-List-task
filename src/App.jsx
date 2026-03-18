@@ -3,10 +3,8 @@ import {
   setTitle,
   addSubTask,
   updateSubTask,
-  saveTodo,
-  deleteTodo,
   editTodo,
-  fetchTodos,
+  // fetchTodos,
   saveTodoAsync,
   deleteTodoAsync,
 } from "../redux/todoSlice";
@@ -19,9 +17,9 @@ export default function App() {
     (state) => state.todos,
   );
 
-  useEffect(() => {
-    dispatch(fetchTodos());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(fetchTodos());
+  // }, []);
 
   return (
     <>
@@ -97,7 +95,7 @@ export default function App() {
               </div>
 
               <ul className="list-disc ml-5 mt-2">
-                {todo.subTasks.map((task, i) => (
+                {todo.subtasks.map((task, i) => (
                   <li key={i}>{task}</li>
                 ))}
               </ul>
