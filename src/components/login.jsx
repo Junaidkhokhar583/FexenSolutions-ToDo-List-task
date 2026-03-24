@@ -6,8 +6,9 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [signin, setSignin] = useState(false);
-
   const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
+
 
   const handleLogin = async () => {
     setLoading(true);
@@ -35,9 +36,9 @@ export default function Login() {
     });
 
     if (error) {
-      setErrorMsg(error.message);
+      setErrorMsg(error.message||"Check your email to confirm signup.");
     } else {
-      setErrorMsg("Check your email to confirm signup!");
+      setSuccessMsg("User registered. Please log in now!");
     }
 
     setSignin(false);
@@ -68,6 +69,9 @@ export default function Login() {
 
         {errorMsg && (
           <p className="text-red-500 text-sm mb-2">{errorMsg}</p>
+        )}
+        {successMsg && (
+          <p className="text-green-500 text-sm mb-2">{successMsg}</p>
         )}
 
         <button
