@@ -5,6 +5,8 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [signin, setSignin] = useState(false);
+
   const [errorMsg, setErrorMsg] = useState("");
 
   const handleLogin = async () => {
@@ -24,7 +26,7 @@ export default function Login() {
   };
 
   const handleSignup = async () => {
-    setLoading(true);
+    setSignin(true);
     setErrorMsg("");
 
     const { error } = await supabase.auth.signUp({
@@ -38,7 +40,7 @@ export default function Login() {
       setErrorMsg("Check your email to confirm signup!");
     }
 
-    setLoading(false);
+    setSignin(false);
   };
 
   return (
@@ -81,7 +83,7 @@ export default function Login() {
           disabled={loading}
           className="w-full bg-green-500 text-white p-2 rounded"
         >
-          Signup
+         {signin ? "Signing In..." : "Sign in"}
         </button>
       </div>
     </div>
