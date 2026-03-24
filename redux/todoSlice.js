@@ -89,12 +89,12 @@ const todoSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      // fetch
+      
       .addCase(fetchTodos.fulfilled, (state, action) => {
         state.todos = action.payload;
       })
 
-      // save
+      
       .addCase(saveTodoAsync.fulfilled, (state, action) => {
         if (!action.payload) return;
 
@@ -109,7 +109,6 @@ const todoSlice = createSlice({
         state.subTasks = [""];
       })
 
-      // delete
       .addCase(deleteTodoAsync.fulfilled, (state, action) => {
         state.todos = state.todos.filter(
           (_, i) => i !== action.payload
